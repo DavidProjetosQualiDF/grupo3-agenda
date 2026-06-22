@@ -27,7 +27,6 @@ def pacientes():
     pacientes = banco.listar_pacientes()
     return render_template("pacientes.html", pacientes=pacientes)
 
-
 @app.route("/cadastrar_paciente", methods=["GET", "POST"])
 def cadastrar_paciente():
     if request.method == "POST":
@@ -36,7 +35,6 @@ def cadastrar_paciente():
         banco.inserir_paciente(nome, telefone)
         return redirect(url_for("pacientes"))
     return render_template("cadastrar_paciente.html")
-
 
 @app.route("/editar_paciente/<int:id>", methods=["GET", "POST"])
 def editar_paciente(id):
@@ -48,14 +46,14 @@ def editar_paciente(id):
         return redirect(url_for("pacientes"))
     return render_template("editar_paciente.html", paciente=paciente)
 
-
 @app.route("/deletar_paciente/<int:id>", methods=["GET", "POST"])
 def deletar_paciente(id):
     paciente = banco.buscar_paciente(id)
     if request.method == "POST":
         banco.deletar_paciente(id)
         return redirect(url_for("pacientes"))
-    return render_template("deletar.html", paciente=paciente)
+    return render_template("deletar_paciente.html", paciente=paciente)
+
 
 # ---------------- MÉDICOS ----------------
 
@@ -65,7 +63,6 @@ def medicos():
     medicos = banco.listar_medicos()
     return render_template("medicos.html", medicos=medicos)
 
-
 @app.route("/cadastrar_medico", methods=["GET", "POST"])
 def cadastrar_medico():
     if request.method == "POST":
@@ -74,7 +71,6 @@ def cadastrar_medico():
         banco.inserir_medico(nome, especialidade)
         return redirect(url_for("medicos"))
     return render_template("cadastrar_medico.html")
-
 
 @app.route("/editar_medico/<int:id>", methods=["GET", "POST"])
 def editar_medico(id):
@@ -86,7 +82,6 @@ def editar_medico(id):
         return redirect(url_for("medicos"))
     return render_template("editar_medico.html", medico=medico)
 
-
 @app.route("/deletar_medico/<int:id>", methods=["GET", "POST"])
 def deletar_medico(id):
     medico = banco.buscar_medico(id)
@@ -95,6 +90,7 @@ def deletar_medico(id):
         return redirect(url_for("medicos"))
     return render_template("deletar_medico.html", medico=medico)
 
+
 # ---------------- CONSULTAS ----------------
 
 
@@ -102,7 +98,6 @@ def deletar_medico(id):
 def consultas():
     consultas = banco.listar_consultas()
     return render_template("consultas.html", consultas=consultas)
-
 
 @app.route("/agendar", methods=["GET", "POST"])
 def agendar():
@@ -116,7 +111,6 @@ def agendar():
         banco.inserir_consulta(paciente_id, medico_id, data, horario)
         return redirect(url_for("consultas"))
     return render_template("agendar.html", pacientes=pacientes, medicos=medicos)
-
 
 @app.route("/editar_consulta/<int:id>", methods=["GET", "POST"])
 def editar_consulta(id):
@@ -133,7 +127,6 @@ def editar_consulta(id):
     return render_template("editar_consulta.html", consulta=consulta,
                            pacientes=pacientes, medicos=medicos)
 
-
 @app.route("/deletar_consulta/<int:id>", methods=["GET", "POST"])
 def deletar_consulta(id):
     consulta = banco.buscar_consulta(id)
@@ -141,6 +134,7 @@ def deletar_consulta(id):
         banco.deletar_consulta(id)
         return redirect(url_for("consultas"))
     return render_template("deletar_consulta.html", consulta=consulta)
+
 
 
 # ---------------- MAIN ----------------
