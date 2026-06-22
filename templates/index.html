@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block conteudo %}
+  <h1>🗓️ Agenda de Consultas</h1>
+  <div class="cards">
+    <div class="card">
+      <h2>{{ total_pacientes }}</h2><p>Pacientes</p>
+    </div>
+    <div class="card">
+      <h2>{{ total_medicos }}</h2><p>Médicos</p>
+    </div>
+    <div class="card">
+      <h2>{{ consultas_hoje|length }}</h2><p>Consultas hoje</p>
+    </div>
+  </div>
+
+  <h2>📅 Consultas de hoje ({{ hoje }})</h2>
+  {% if consultas_hoje %}
+    <table>
+      <thead>
+        <tr><th>Horário</th><th>Paciente</th><th>Médico</th><th>Especialidade</th></tr>
+      </thead>
+      <tbody>
+        {% for c in consultas_hoje %}
+        <tr>
+          <td>{{ c[0] }}</td><td>{{ c[1] }}</td>
+          <td>{{ c[2] }}</td><td>{{ c[3] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>agagen
+    </table>
+  {% else %}
+    <p class="vazio">Nenhuma consulta agendada para hoje.</p>
+  {% endif %}
+{% endblock %}

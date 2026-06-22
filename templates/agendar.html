@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block conteudo %}
+  <h1>📅 Agendar Consulta</h1>
+
+  {% if erro %}
+    <div class="erro">{{ erro }}</div>
+  {% endif %}
+
+  <form method="POST">
+    <label>Paciente</label>
+    <select name="paciente_id" required>
+      {% for p in pacientes %}
+        <option value="{{ p[0] }}">{{ p[1] }}</option>
+      {% endfor %}
+    </select>
+
+    <label>Médico</label>
+    <select name="medico_id" required>
+      {% for m in medicos %}
+        <option value="{{ m[0] }}">{{ m[1] }} — {{ m[2] }}</option>
+      {% endfor %}
+    </select>
+
+    <label>Data</label>
+    <input type="date" name="data" required>
+
+    <label>Horário</label>
+    <input type="time" name="horario" required>
+
+    <button type="submit">Agendar</button>
+  </form>
+{% endblock %}

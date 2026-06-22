@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block conteudo %}
+  <h1>✏️ Editar Paciente</h1>
+  <form method="POST">
+    <label>Nome:</label>
+    <input type="text" name="nome" value="{{ paciente[1] }}" required><br>
+    <label>Telefone:</label>
+    <input type="text" name="telefone" value="{{ paciente[2] }}" required><br>
+    <button type="submit">Salvar Alterações</button>
+  </form>
+{% endblock %}
+
+

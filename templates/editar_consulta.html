@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block conteudo %}
+  <h1>✏️ Editar Consulta</h1>
+  <form method="POST">
+    <label>Paciente:</label>
+    <select name="paciente" required>
+      {% for p in pacientes %}
+      <option value="{{ p[0] }}" {% if p[0] == consulta[1] %}selected{% endif %}>{{ p[1] }}</option>
+      {% endfor %}
+    </select><br>
+
+    <label>Médico:</label>
+    <select name="medico" required>
+      {% for m in medicos %}
+      <option value="{{ m[0] }}" {% if m[0] == consulta[2] %}selected{% endif %}>{{ m[1] }} - {{ m[2] }}</option>
+      {% endfor %}
+    </select><br>
+
+    <label>

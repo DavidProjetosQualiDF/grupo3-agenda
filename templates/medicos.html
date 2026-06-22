@@ -1,0 +1,31 @@
+<!-- CODIGO SUGERIDO DO COPILOT -->
+
+{% extends "base.html" %}
+{% block conteudo %}
+  <h1>🩺 Médicos</h1>
+  <a href="{{ url_for('cadastrar_medico') }}" class="btn">➕ Novo Médico</a>
+
+  {% if medicos %}
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Nome</th><th>Especialidade</th><th>Ações</th></tr>
+      </thead>
+      <tbody>
+        {% for m in medicos %}
+        <tr>
+          <td>{{ m[0] }}</td>
+          <td>{{ m[1] }}</td>
+          <td>{{ m[2] }}</td>
+          <td>
+            <a href="{{ url_for('editar_medico', id=m[0]) }}">✏️ Editar</a> |
+            <a href="{{ url_for('deletar_medico', id=m[0]) }}">🗑️ Excluir</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Nenhum médico cadastrado.</p>
+  {% endif %}
+{% endblock %}
+

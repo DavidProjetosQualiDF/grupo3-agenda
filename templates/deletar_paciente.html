@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block conteudo %}
+  <h1>🗑️ Excluir Paciente</h1>
+  <p>Tem certeza que deseja excluir <strong>{{ paciente[1] }}</strong>?</p>
+  <form method="POST">
+    <button type="submit">Confirmar Exclusão</button>
+    <a href="{{ url_for('pacientes') }}">Cancelar</a>
+  </form>
+{% endblock %}
