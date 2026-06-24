@@ -5,7 +5,9 @@ import sqlite3
 DB_NAME = "agenda.db"
 
 def conectar():
-    return sqlite3.connect(DB_NAME)
+    con = sqlite3.connect(DB_NAME)
+    con.row_factory = sqlite3.Row
+    return con
 
 def criar_tabelas():
     con = conectar()
@@ -13,12 +15,14 @@ def criar_tabelas():
 
     # Pacientes
     cur.execute("""
-        CREATE TABLE IF NOT EXISTS pacientes (
-            id       INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome     TEXT NOT NULL,
-            telefone TEXT NOT NULL
-        )
-    """)
+    CREATE TABLE IF NOT EXISTS pacientes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL,
+        idade INTEGER,
+        cpf TEXT,
+        telefone TEXT
+    )
+""")
 
     # Médicos
     cur.execute("""
@@ -55,10 +59,19 @@ def listar_pacientes():
     con.close()
     return dados
 
-def inserir_paciente(nome, telefone):
+def inserir_paciente(nome, idade, cpf, telefone):
     con = conectar()
     cur = con.cursor()
-    cur.execute("INSERT INTO pacientes (nome, telefone) VALUES (?, ?)", (nome, telefone))
+
+    cur.execute(
+        """
+        INSERT INTO pacientes
+        (nome, idade, cpf, telefone)
+        VALUES (?, ?, ?, ?)
+        """,
+        (nome, idade, cpf, telefone)
+    )
+
     con.commit()
     con.close()
 
@@ -70,10 +83,10 @@ def buscar_paciente(id):
     con.close()
     return dado
 
-def atualizar_paciente(id, nome, telefone):
+def atualizar_paciente(id, nome, telefone, idade, cpf):
     con = conectar()
     cur = con.cursor()
-    cur.execute("UPDATE pacientes SET nome=?, telefone=? WHERE id=?", (nome, telefone, id))
+    cur.execute("UPDATE pacientes SET nome=?, telefone=?, idade=?, cpf=? WHERE id=?", (nome, telefone, idade, cpf, id))
     con.commit()
     con.close()
 
@@ -126,18 +139,27 @@ def deletar_medico(id):
 def listar_consultas():
     con = conectar()
     cur = con.cursor()
+
     cur.execute("""
-        SELECT c.id, c.paciente_id, c.medico_id, c.data, c.horario,
-               p.nome, m.nome, m.especialidade
+        SELECT
+            c.id,
+            c.data,
+            c.horario,
+            p.nome AS paciente,
+            m.nome AS medico,
+            m.especialidade
         FROM consultas c
         JOIN pacientes p ON c.paciente_id = p.id
         JOIN medicos m ON c.medico_id = m.id
         WHERE c.cancelada = 0
+        ORDER BY c.data, c.horario
     """)
+
     dados = cur.fetchall()
     con.close()
     return dados
 
+   
 def inserir_consulta(paciente_id, medico_id, data, horario):
     con = conectar()
     cur = con.cursor()
@@ -169,46 +191,3 @@ def deletar_consulta(id):
     con.commit()
     con.close()
 
-
-
-# OLD SCRIPT
-# import sqlite3
-
-# def conectar():
-#     return sqlite3.connect("agenda.db")
-
-# def criar_tabelas():
-#     con = conectar()
-#     cur = con.cursor()
-
-#     cur.execute("""
-#         CREATE TABLE IF NOT EXISTS pacientes (
-#             id       INTEGER PRIMARY KEY AUTOINCREMENT,
-#             nome     TEXT NOT NULL,
-#             telefone TEXT NOT NULL
-#         )
-#     """)
-
-#     cur.execute("""
-#         CREATE TABLE IF NOT EXISTS medicos (
-#             id            INTEGER PRIMARY KEY AUTOINCREMENT,
-#             nome          TEXT NOT NULL,
-#             especialidade TEXT NOT NULL
-#         )
-#     """)
-
-#     cur.execute("""
-#         CREATE TABLE IF NOT EXISTS consultas (
-#             id          INTEGER PRIMARY KEY AUTOINCREMENT,
-#             paciente_id INTEGER NOT NULL,
-#             medico_id   INTEGER NOT NULL,
-#             data        TEXT    NOT NULL,
-#             horario     TEXT    NOT NULL,
-#             cancelada   INTEGER DEFAULT 0,
-#             FOREIGN KEY (paciente_id) REFERENCES pacientes(id),
-#             FOREIGN KEY (medico_id)   REFERENCES medicos(id)
-#         )
-#     """)
-
-#     con.commit()
-#     con.close()
